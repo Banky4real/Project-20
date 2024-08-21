@@ -62,4 +62,4 @@ GRANT ALL PRIVILEGES ON * . * TO 'banky'@'%'; " `
 
 `docker exec -i mysql-server mysql -uroot -p$MYSQL_PW < ./create_user.sql`
 
-![root-password-exported](./Images/new-user-access-to-the-container.png)
+![new-user-access-to-the-container](./Images/new-user-access-to-the-container.png)
