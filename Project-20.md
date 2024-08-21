@@ -63,3 +63,9 @@ GRANT ALL PRIVILEGES ON * . * TO 'banky'@'%'; " `
 `docker exec -i mysql-server mysql -uroot -p$MYSQL_PW < ./create_user.sql`
 
 ![new-user-access-to-the-container](./Images/new-user-access-to-the-container.png)
+
+### Connecting to the Mysql server from the second container that has the mysql client running on it. We pulled down the mysql client image from docker hub on the tooling-app bridge network we created and connecting to the mysql-server.
+
+`docker run --network tooling_app_network --name mysql-client -it --rm mysql mysql -h mysqlserverhost -u banky -p`
+
+![connecting-to-mysql-server-from-my-sql-client-on-a-second-container-running-my-sql-client](./Images/connecting-to-mysql-server-from-my-sql-client-on-a-second-container-running-my-sql-client.png)
