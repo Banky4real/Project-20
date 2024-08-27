@@ -69,3 +69,54 @@ GRANT ALL PRIVILEGES ON * . * TO 'banky'@'%'; " `
 `docker run --network tooling_app_network --name mysql-client -it --rm mysql mysql -h mysqlserverhost -u banky -p`
 
 ![connecting-to-mysql-server-from-my-sql-client-on-a-second-container-running-my-sql-client](./Images/connecting-to-mysql-server-from-my-sql-client-on-a-second-container-running-my-sql-client.png)
+
+### Preparing a Database schema that our tooling application will connect to for data storage.
+
+### Cloning down our tooling app.
+
+`git clone https://github.com/dareyio/tooling.git`
+
+![cloning-our-tooling-app-from-github-repo](./Images/cloning-our-tooling-app-from-github-repo.png)
+
+### Exporting the location of our sql file for the container to be able to access it.
+
+`export tooling_db_schema=~/tooling/html/tooling_db_schema.sql`
+
+![exporting-the-location-of-the-sql-file](./Images/exporting-the-location-of-the-sql-file.png)
+
+![location-exported](./Images/location-exported.png)
+
+
+### Executing a command in the running container.
+
+`docker exec -i mysql-server mysql -uroot -p$MYSQL_PW < $tooling_db_schema
+`
+![executing-a-command-in-the-running-container](./Images/executing-a-command-in-the-running-container.png)
+
+## Containerizing our tooling app.
+
+### Building our Dockerfile which has been updated with the latest version of php, which is the base image
+
+`docker build . -t tooling:0.0.1`
+
+![Building-our-Dockerfile-into-an-image](./Images/Building-our-Dockerfile-into-an-image.png)
+
+### Running our Docker image which we have just built in a container on the same bridge network with the database so they can communicate with each other.
+
+`docker run --name=banky_tooling-app --network tooling_app_network -p=8085:80 -d -it tooling:0.0.1 bash`
+
+`docker ps`
+
+![Docker-image-currently-running](./Images/Docker-image-currently-running.png)
+
+### Tooling App Live on port 8085 after starting apache2 server in the container and some troubleshooting.
+
+`docker ps`
+
+![tooling-app-live-on-port-8085](./Images/tooling-app-live-on-port-8085.png)
+
+![tooling-app-dashboard](./Images/tooling-app-dashboard.png)
+
+![Environment-tab-of-our-tooling-app](./Images/Environment-tab-of-our-tooling-app.png)
+
+## Practice Task
