@@ -111,7 +111,6 @@ GRANT ALL PRIVILEGES ON * . * TO 'banky'@'%'; " `
 
 ### Tooling App Live on port 8085 after starting apache2 server in the container and some troubleshooting.
 
-`docker ps`
 
 ![tooling-app-live-on-port-8085](./Images/tooling-app-live-on-port-8085.png)
 
@@ -119,4 +118,26 @@ GRANT ALL PRIVILEGES ON * . * TO 'banky'@'%'; " `
 
 ![Environment-tab-of-our-tooling-app](./Images/Environment-tab-of-our-tooling-app.png)
 
-## Practice Task
+## Practice Task: Implementing a proof of concept to migrate the PHP-TODO app into a containerized application
+
+### Running another database server in a separate container on the tooling app Bridge network
+
+`docker run --network tooling_app_network -h mysqlserverhost --name=banky-mysql-server -e MYSQL_ROOT_PASSWORD=banky12345  -d mysql/mysql-server:latest`
+
+![creating-a-new-database-for-php-todo](./Images/creating-a-new-database-for-php-todo.png)
+
+### Creating an sql script that will create a new user that our app will use to connect remotely to the database
+
+`docker exec -i banky-mysql-server mysql -uroot -pbanky12345 < create_user2.sql`
+
+![creating-a-new-user-for-app-to-connect-to-database](./Images/creating-a-new-user-for-app-to-connect-to-database.png)
+
+### Creating a toolingdb database in the DB container via mysql client container. 
+
+`docker run --network tooling_app_network --name mysql-client -it --rm mysql mysql -h mysqlserverhost -ubanky2 -p`
+
+`create database toolingdb;`
+
+![creating-a-new-user-for-app-to-connect-to-database](./Images/creating-toolingdb-database-in-our-DB-container-for-our-php-todo-app.png)
+
+![tooling-db-created](./Images/tooling-db-created.png)
